@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: capstone-web-deployment
+  namespace: capstone
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: capstone
+  template:
+    metadata:
+      labels:
+        app: capstone
+    spec:
+      containers:
+      - name: capstone
+        image: hyunjun1325/node:0.11
+        ports:
+        - containerPort: 8080
+        command: ["/bin/bash","-ec", "while :; do sleep 5; done"]
+        # command: ["/bin/bash","node", "/home/node/index.js"]
+        volumeMounts:
+        - mountPath: "/home/node"
+          name: capstone-pvc
+      volumes:
+        - name: capstone-pvc
+          persistentVolumeClaim:
+            claimName: capstone-web-pvc
+
